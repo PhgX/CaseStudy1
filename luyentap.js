@@ -8,17 +8,26 @@ c.fillRect (0,0,canvas.width, canvas.height);
 let gravity = 0.7
 
 class Dojo {
-    constructor({position, velocity}) {
+    constructor({position, velocity, color}) {
         this.position = position;
         this.velocity = velocity;
         this.width = 50;
         this.height = 150;
         this.velocity = velocity;
+        this.attackBox = {
+            position: this.position,
+            width: 100,
+            height: 50
+        }
+        this.color = color;
     }
 
     draw() {
-        c.fillStyle = 'red';
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);        
+        c.fillStyle = this.color;
+        c.fillRect(this.position.x, this.position.y, this.width, this.height); 
+        
+        c.fillStyle = 'blue'
+        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
     }
 
     update() {
@@ -47,7 +56,8 @@ let player = new Dojo({
     velocity: {
     x: 0,
     y: 0
-    }   
+    },
+    color: 'red'   /**Thêm vào để phân biệt player và enemy */
 }) 
 player.draw()
 
@@ -59,7 +69,8 @@ let enemy = new Dojo({
     velocity: {
     x: 0,
     y: 0
-    }   
+    },
+    color: 'green'   /**Thêm vào để phân biệt player và enemy */
 }) 
 enemy.draw()
 
