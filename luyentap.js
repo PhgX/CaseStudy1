@@ -20,14 +20,20 @@ class Dojo {
             height: 50
         }
         this.color = color;
+        this.isAttacking;
     }
 
     draw() {
         c.fillStyle = this.color;
         c.fillRect(this.position.x, this.position.y, this.width, this.height); 
         
-        c.fillStyle = 'blue'
-        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+        // c.fillStyle = 'blue'
+        // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+
+        if(this.isAttacking){
+            c.fillStyle = 'blue'
+            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+        }
     }
 
     update() {
@@ -40,11 +46,14 @@ class Dojo {
         }
         else {
             this.velocity.y += gravity;
-        }
+        }       
+    }
 
-        if(this.position.x + this.width + this.velocity.x >= canvas.width){
-            this.velocity.x = 0;
-        }
+    attack(){
+        this.isAttacking = true;
+        setTimeout (() => {
+            this.isAttacking = false
+        }, 100)
     }
 }
 
@@ -84,6 +93,7 @@ const keys = {
     w: {
         pressed: false
     },
+    
     ArrowLeft: {
         pressed: false
     },
@@ -122,6 +132,18 @@ function animate(){
     }  else if (keys.ArrowUp.pressed && enemy.lastkey === 'ArrowUp') {
         enemy.velocity.y = -10
     } 
+
+    //Xac dinh va cham
+    if(player.attackBox.position.x + player.attackBox.width >= enemy.position.x &&
+       player.attackBox.position.x <= enemy.position.x + enemy.width &&
+       player.attackBox.position.y + player.attackBox.height >= enemy.position.y&&
+       player.attackBox.y <= enemy.position.y + enemy.height &&
+       player.isAttacking
+       ) {
+        //    console.log('a')
+           player.isAttacking = false;           
+       }
+// console.log('b')
 }
 animate();
 
@@ -140,6 +162,9 @@ window.addEventListener('keydown', (event) => {
             keys.w.pressed = true;
             player.lastkey = 'w'
             break;
+        case ' ': 
+            player.attack()
+            break;        
 
         case 'ArrowLeft':
             keys.ArrowLeft.pressed = true;
