@@ -22,18 +22,20 @@ class Dojo {
         this.color = color;
         this.isAttacking;
     }
+    attack() {
+        this.isAttacking = true;
+        setTimeout (() => {
+            this.isAttacking = false;
+        }, 100)
+        
+    }
 
     draw() {
         c.fillStyle = this.color;
         c.fillRect(this.position.x, this.position.y, this.width, this.height); 
         
-        // c.fillStyle = 'blue'
-        // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
-
-        if(this.isAttacking){
-            c.fillStyle = 'blue'
-            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
-        }
+        c.fillStyle = 'blue'
+        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
     }
 
     update() {
@@ -46,14 +48,17 @@ class Dojo {
         }
         else {
             this.velocity.y += gravity;
-        }       
-    }
-
-    attack(){
-        this.isAttacking = true;
-        setTimeout (() => {
-            this.isAttacking = false
-        }, 100)
+        }    
+        
+        if(player.attackBox.position.x + player.attackBox.width >= enemy.position.x&&
+           player.attackBox.position.x <= enemy.position.x + enemy.width &&
+           player.attackBox.position.y + player.attackBox.height >= enemy.position.y&&
+           player.attackBox.position.y <= enemy.position.y + enemy.height&&
+           player.isAttacking)
+           {
+            this.isAttacking = false   
+            console.log('va cham')
+           }
     }
 }
 
@@ -93,7 +98,6 @@ const keys = {
     w: {
         pressed: false
     },
-    
     ArrowLeft: {
         pressed: false
     },
@@ -132,18 +136,6 @@ function animate(){
     }  else if (keys.ArrowUp.pressed && enemy.lastkey === 'ArrowUp') {
         enemy.velocity.y = -10
     } 
-
-    //Xac dinh va cham
-    if(player.attackBox.position.x + player.attackBox.width >= enemy.position.x &&
-       player.attackBox.position.x <= enemy.position.x + enemy.width &&
-       player.attackBox.position.y + player.attackBox.height >= enemy.position.y&&
-       player.attackBox.y <= enemy.position.y + enemy.height &&
-       player.isAttacking
-       ) {
-        //    console.log('a')
-           player.isAttacking = false;           
-       }
-// console.log('b')
 }
 animate();
 
@@ -161,9 +153,6 @@ window.addEventListener('keydown', (event) => {
         case 'w':
             keys.w.pressed = true;
             player.lastkey = 'w'
-            break;
-        case ' ': 
-            player.attack()
             break;        
 
         case 'ArrowLeft':
@@ -178,37 +167,8 @@ window.addEventListener('keydown', (event) => {
             keys.ArrowUp.pressed = true;
             enemy.lastkey = 'ArrowUp'
             break;
-    }
-    console.log(event.key)
-} )
-
-//Giữ nút:
-window.addEventListener('keypress', (event) => {
-    switch(event.key) {
-        case 'a':
-            keys.a.pressed = true;
-            player.lastkey = 'a'            
-            break;
-        case 'd':
-            keys.d.pressed = true;
-            player.lastkey = 'd'
-            break;
-        case 'w':
-            keys.w.pressed = true;
-            player.lastkey = 'w'
-            break;
-
-        case 'ArrowLeft':
-            keys.ArrowLeft.pressed = true;
-            enemy.lastkey = 'ArrowLeft'
-            break;
-        case 'ArrowRight':
-            keys.ArrowRight.pressed = true;
-            enemy.lastkey = 'ArrowRight'
-            break;
-        case 'ArrowUp':
-            keys.ArrowUp.pressed = true;
-            enemy.lastkey = 'ArrowUp'
+        case 'ArrowDown':
+            enemy.attack();
             break;
     }
     console.log(event.key)
@@ -229,6 +189,9 @@ window.addEventListener('keyup', (event) => {
             keys.w.pressed = false;
             player.lastkey = 'w'
             break;
+        case ' ':
+            player.attack();
+            break;
 
         case 'ArrowLeft':
             keys.ArrowLeft.pressed = false;
@@ -241,7 +204,7 @@ window.addEventListener('keyup', (event) => {
         case 'ArrowUp':
             keys.ArrowUp.pressed = false;
             enemy.lastkey = 'ArrowUp'
-            break;
+            break;        
     }
     console.log(event.key)
 } )
