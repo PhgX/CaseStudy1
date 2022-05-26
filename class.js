@@ -1,5 +1,5 @@
 class imageInput {
-    constructor({position, imgSrc, scale = 2}) {
+    constructor({position, imgSrc, scale}) {
         this.position = position
         this.width = 50
         this.height = 150  
@@ -9,9 +9,7 @@ class imageInput {
     } 
 
     draw() {
-        c.drawImage(this.image, this.position.x, this.position.y);
-        this.image.width * this.scale;
-        this.image.height * this.scale;
+        c.drawImage(this.image, this.position.x, this.position.y, this.image.width*scale, this.image.height*scale);       
     } 
 
     update() {

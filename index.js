@@ -11,6 +11,10 @@ const background = new imageInput ({
         x: 0,
         y: 0
     },
+    scale: {
+        x: 0,
+        y: 0
+    },
     imgSrc: './img/background/background.png'
 })
 
@@ -19,7 +23,11 @@ const house = new imageInput ({
         x: 750,
         y: 390
     },
-    imgSrc: './img/background/shop.png'
+    scale: {
+        x: 0,
+        y: 0
+    },
+    imgSrc: './img/background/shop_anim.png'
 })
 
 const player = new Dojo ({
@@ -36,7 +44,7 @@ const player = new Dojo ({
         y: 0
     }
 })
-player.draw()
+
 
 
 const enemy = new Dojo ({
@@ -53,7 +61,7 @@ const enemy = new Dojo ({
         y: 0
     }
 })
-enemy.draw()
+
 
 
 const keys = {
@@ -82,7 +90,7 @@ function timecountdown() {
     let timedecrease = setTimeout(timecountdown, 1000)      
     if(time>0){        
         time--
-        player.gameStart.play();
+        player.gameStart.play()
         document.querySelector('#time').innerHTML = time;                    
         if(player.health <= 0){            
             clearTimeout(timedecrease)
