@@ -1,19 +1,42 @@
 class imageInput {
-    constructor({position, imgSrc, scale}) {
-        this.position = position
-        this.width = 50
-        this.height = 150  
-        this.image = new Image()
-        this.image.src = imgSrc 
-        this.scale = scale
+    constructor({position, imgSrc, scale, frameMax}) {
+        this.position = position;
+        this.width = 50;
+        this.height = 150 ;
+        this.image = new Image();
+        this.image.src = imgSrc;
+        this.scale = scale;
+        this.frameMax = frameMax;
+        this.frameCurrent = 0;
+        this.frameEslapsed = 0;
+        this.frameHold = 10;
     } 
 
     draw() {
-        c.drawImage(this.image, this.position.x, this.position.y, this.image.width*scale, this.image.height*scale);       
+        c.drawImage(
+            this.image,
+            this.frameCurrent*(this.image.width/this.frameMax),
+            0,
+            this.image.width/this.frameMax,
+            this.image.height,
+            this.position.x, 
+            this.position.y,
+            (this.image.width /this.frameMax)* this.scale,
+            this.image.height * this.scale
+            ); 
     } 
 
     update() {
         this.draw();
+        this.frameEslapsed++;
+        if (this.frameEslapsed % this.frameHold === 0){
+            if(this.frameCurrent < this.frameMax -1){
+                this.frameCurrent++
+            } else {
+                this.frameCurrent = 0
+            }
+        }
+        
     }
 }
 
