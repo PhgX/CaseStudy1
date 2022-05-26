@@ -4,12 +4,13 @@ class imageInput {
         this.width = 50
         this.height = 150  
         this.image = new Image()
-        this.image.src = imgSrc
-        
+        this.image.src = imgSrc        
     } 
+
     draw() {
-        c.drawImage(this.image)
+        c.drawImage(this.image, this.position.x, this.position.y)
     } 
+
     update() {
         this.draw()
     }
@@ -77,7 +78,7 @@ class Dojo {
         this.position.y += this.speed.y;
         this.position.x += this.speed.x;
 
-        if(this.position.y + this.height + this.speed.y + gravity >= canvas.height){
+        if(this.position.y + this.height + this.speed.y + gravity >= canvas.height - 96){
             this.speed.y = 0;
         }
         else {

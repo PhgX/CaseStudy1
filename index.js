@@ -6,6 +6,22 @@ canvas.height = 576;
 
 const gravity = 0.8;
 
+const background = new imageInput ({
+    position: {
+        x: 0,
+        y: 0
+    },
+    imgSrc: './img/background/background.png'
+})
+
+const house = new imageInput ({
+    position: {
+        x: 0,
+        y: 0
+    },
+    imgSrc: './img/decorations/shop.png'
+})
+
 const player = new Dojo ({
     position: {
         x: 0,
@@ -62,9 +78,9 @@ const keys = {
 }
 
 let time = 20 //set time
-function timecountdown() {       
-    if(time>0){
-        let timedecrease = setTimeout(timecountdown, 1000)
+function timecountdown() { 
+    let timedecrease = setTimeout(timecountdown, 1000)      
+    if(time>0){        
         time--
         document.querySelector('#time').innerHTML = time;                    
         if(player.health <= 0){            
@@ -96,10 +112,11 @@ function animate() {
     window.requestAnimationFrame(animate)
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
+    background.update()
     player.update()
     enemy.update()    
     
-    //Player speed control
+    //Player speed control & attack direction
     player.speed.x = 0
     if(keys.a.pressed === true && player.lastkey === 'a' && player.moveLeftSide() === true){
         player.speed.x = -5
@@ -111,7 +128,7 @@ function animate() {
         player.speed.y = -10
     }
 
-    //Enemy speed control   
+    //Enemy speed control & attack direction  
     enemy.speed.x = 0
     if (keys.ArrowLeft.pressed === true && enemy.lastkey === 'ArrowLeft' && enemy.moveLeftSide() === true) {
         enemy.speed.x = -5
