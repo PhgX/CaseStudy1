@@ -6,90 +6,6 @@ canvas.height = 576;
 
 const gravity = 0.8;
 
-class Dojo {
-    constructor({position, speed, changeDirection}) {
-        this.position = position
-        this.speed = speed
-        this.width = 50
-        this.height = 150  
-        this.lastkey      
-        this.weaponRect = {
-            position: {
-                x: this.position.x,
-                y: this.position.y
-            },
-            changeDirection,
-            width: 100,
-            height: 50            
-        }
-        this.isAttack  
-        this.health = 100    
-    }
-
-    draw() {
-        c.fillStyle = 'red'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
-
-        if(this.isAttack) {
-            c.fillStyle = 'blue'
-            c.fillRect(this.weaponRect.position.x, this.weaponRect.position.y, this.weaponRect.width, this.weaponRect.height)
-        }        
-    }
-
-    moveLeftSide() {
-        if(this.position.x < 0){
-            return false;
-        } else {
-            return true;
-        }
-    }
-    
-    moveRightSide() {
-        if(this.position.x + this.width > canvas.width){
-            return false;
-        } else {
-            return true;
-        }
-    }  
-
-    moveUp() {
-        if(this.position.y < 0){
-            return false;
-        } else {
-            return true;      
-        }   
-    }
-// if((this.position.x > 0 && this.position.x + this.width <= canvas.width)        
-//     || this.position.y + this.position.height >= 0) {
-//         return true;
-//     } else {
-//         return false;
-//     }    
-      
-    update() {
-        this.draw()
-        this.weaponRect.position.x = this.position.x + this.weaponRect.changeDirection.x;
-        this.weaponRect.position.y = this.position.y;
-        
-        this.position.y += this.speed.y;
-        this.position.x += this.speed.x;
-
-        if(this.position.y + this.height + this.speed.y + gravity >= canvas.height){
-            this.speed.y = 0;
-        }
-        else {
-            this.speed.y += gravity;
-        } 
-    }
-    
-    attack() {
-        this.isAttack = true;
-        setTimeout (() => {
-            this.isAttack = false;
-        }, 100)
-    }
-}
-
 const player = new Dojo ({
     position: {
         x: 0,
@@ -117,7 +33,7 @@ const enemy = new Dojo ({
         y: 0
     },
     changeDirection: {
-        x: -50,
+        x: 0,
         y: 0
     }
 })
@@ -150,30 +66,29 @@ function timecountdown() {
     if(time>0){
         let timedecrease = setTimeout(timecountdown, 1000)
         time--
-        document.querySelector('#time').innerHTML = time;         
+        document.querySelector('#time').innerHTML = time;                    
         if(player.health <= 0){            
             clearTimeout(timedecrease)
             document.querySelector('#draw').innerHTML = 'Người chơi 2 win'
-            document.querySelector('#draw').style.display = 'flex'           
+            document.querySelector('#draw').style.display = 'flex'                         
         }
         if(enemy.health <= 0){            
             clearTimeout(timedecrease)
             document.querySelector('#draw').innerHTML = 'Người chơi 1 win'
-            document.querySelector('#draw').style.display = 'flex'
+            document.querySelector('#draw').style.display = 'flex'           
     }    
 }
     
     if(time === 0) {
         document.querySelector('#draw').style.display = 'flex'
         if(player.health > enemy.health){
-            document.querySelector('#draw').innerHTML = 'Người chơi 1 win'        
+            document.querySelector('#draw').innerHTML = 'Người chơi 1 win'                      
         } else if (enemy.health > player.health) {
             document.querySelector('#draw').innerHTML = 'Người chơi 2 win'
         } else {
             document.querySelector('#draw').innerHTML = 'Hòa'
         }
-    }
-    
+    }    
 }
 timecountdown();
 
@@ -186,21 +101,25 @@ function animate() {
     
     //Player speed control
     player.speed.x = 0
-    if(keys.a.pressed && player.lastkey === 'a' && player.moveLeftSide() === true){
+    if(keys.a.pressed === true && player.lastkey === 'a' && player.moveLeftSide() === true){
         player.speed.x = -5
-    } else if (keys.d.pressed && player.lastkey === 'd' && player.moveRightSide() === true){
+        player.weaponRect.changeDirection.x = -50
+    } else if (keys.d.pressed === true && player.lastkey === 'd' && player.moveRightSide() === true){
         player.speed.x = 5
-    } else if (keys.w.pressed && player.lastkey === 'w' && player.moveUp() === true){
+        player.weaponRect.changeDirection.x = 0
+    } else if (keys.w.pressed === true && player.lastkey === 'w' && player.moveUp() === true){
         player.speed.y = -10
     }
 
     //Enemy speed control   
     enemy.speed.x = 0
-    if (keys.ArrowLeft.pressed && enemy.lastkey === 'ArrowLeft' && enemy.moveLeftSide() === true) {
+    if (keys.ArrowLeft.pressed === true && enemy.lastkey === 'ArrowLeft' && enemy.moveLeftSide() === true) {
         enemy.speed.x = -5
-    } else if (keys.ArrowRight.pressed && enemy.lastkey === 'ArrowRight' && enemy.moveRightSide() === true) {
+        enemy.weaponRect.changeDirection.x = -50
+    } else if (keys.ArrowRight.pressed === true && enemy.lastkey === 'ArrowRight' && enemy.moveRightSide() === true) {
         enemy.speed.x = 5
-    }  else if (keys.ArrowUp.pressed && enemy.lastkey === 'ArrowUp' && enemy.moveUp() === true) {
+        enemy.weaponRect.changeDirection.x = 0
+    }  else if (keys.ArrowUp.pressed === true && enemy.lastkey === 'ArrowUp' && enemy.moveUp() === true) {
         enemy.speed.y = -10
     } 
 
@@ -236,18 +155,15 @@ window.addEventListener('keydown', (event) => {
     switch(event.key){
         case 'a': 
             keys.a.pressed = true
-            player.lastkey = 'a'
-            stopPlayerMovement()
+            player.lastkey = 'a'           
             break;
         case 'd':
             keys.d.pressed = true
-            player.lastkey = 'd'
-            stopPlayerMovement()
+            player.lastkey = 'd'           
             break
         case 'w':
             keys.w.pressed = true
-            player.lastkey = 'w'
-            stopPlayerMovement()
+            player.lastkey = 'w'           
             break;
         case ' ':
             player.attack();
@@ -256,7 +172,6 @@ window.addEventListener('keydown', (event) => {
         case 'ArrowRight': 
             keys.ArrowRight.pressed = true
             enemy.lastkey = 'ArrowRight'
-
             break;
         case 'ArrowLeft':
             keys.ArrowLeft.pressed = true
