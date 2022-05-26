@@ -8,20 +8,25 @@ c.fillRect (0,0,canvas.width, canvas.height);
 let gravity = 0.7
 
 class Dojo {
-    constructor({position, velocity, color}) {
+    constructor({position, velocity, color, turnface}) {
         this.position = position;
         this.velocity = velocity;
         this.width = 50;
         this.height = 150;
-        this.velocity = velocity;
+        
         this.attackBox = {
-            position: this.position,
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            turnface: turnface,
             width: 100,
             height: 50
         }
         this.color = color;
         this.isAttacking;
     }
+
     attack() {
         this.isAttacking = true;
         setTimeout (() => {
@@ -30,16 +35,21 @@ class Dojo {
         
     }
 
-    draw() {
+    draw() {        
         c.fillStyle = this.color;
         c.fillRect(this.position.x, this.position.y, this.width, this.height); 
         
-        c.fillStyle = 'blue'
-        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+        if(this.isAttacking){
+            c.fillStyle = 'blue'
+            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+        }        
     }
 
     update() {
         this.draw()
+        this.attackBox.position.x = this.position.x + this.attackBox.turnface.x;
+        this.attackBox.position.y = this.position.y;
+        
         this.position.y += this.velocity.y;
         this.position.x += this.velocity.x;
 
@@ -48,17 +58,7 @@ class Dojo {
         }
         else {
             this.velocity.y += gravity;
-        }    
-        
-        if(player.attackBox.position.x + player.attackBox.width >= enemy.position.x&&
-           player.attackBox.position.x <= enemy.position.x + enemy.width &&
-           player.attackBox.position.y + player.attackBox.height >= enemy.position.y&&
-           player.attackBox.position.y <= enemy.position.y + enemy.height&&
-           player.isAttacking)
-           {
-            this.isAttacking = false   
-            console.log('va cham')
-           }
+        } 
     }
 }
 
@@ -71,7 +71,11 @@ let player = new Dojo({
     x: 0,
     y: 0
     },
-    color: 'red'   /**Thêm vào để phân biệt player và enemy */
+    color: 'red',   /**Thêm vào để phân biệt player và enemy */
+    turnface: {
+    x: 0,
+    y: 0
+    }
 }) 
 player.draw()
 
@@ -84,7 +88,11 @@ let enemy = new Dojo({
     x: 0,
     y: 0
     },
-    color: 'green'   /**Thêm vào để phân biệt player và enemy */
+    color: 'green',   /**Thêm vào để phân biệt player và enemy */
+    turnface: {       /**Quay mặt enemy về phía player */
+    x: -50,
+    y: 0
+    }
 }) 
 enemy.draw()
 
@@ -109,13 +117,21 @@ const keys = {
     }
 }
 
+//Điều kiện va chạm giữa vũ khí và nhân vật
+function dieukienvacham({rect1, rect2}) {
+    return(rect1.attackBox.position.x + rect1.attackBox.width >= rect2.position.x &&
+           rect1.attackBox.position.x <= rect2.position.x + rect2.width &&
+           rect1.attackBox.position.y + rect1.attackBox.height >= rect2.position.y &&
+           rect1.attackBox.position.y <= rect2.position.y + rect2.height)
+        }
+
 function animate(){
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
     player.update()
     enemy.update()
-    // console.log('a')
+                            // console.log('kiem tra vong lap')
 
     //kiem soat di chuyen player
     player.velocity.x = 0
@@ -136,6 +152,30 @@ function animate(){
     }  else if (keys.ArrowUp.pressed && enemy.lastkey === 'ArrowUp') {
         enemy.velocity.y = -10
     } 
+
+    //Hàm player attack enemy
+    if(
+        dieukienvacham({
+        rect1: player,
+        rect2: enemy}) 
+        && player.isAttacking
+    ){
+        player.isAttacking = false
+        document.querySelector('#PlayerHealth').style.width = 20%   
+                        console.log('player danh enemy')
+    }
+
+    //Hàm enemy attack player
+    if(
+        dieukienvacham({
+        rect1: enemy,
+        rect2: player}) 
+        && enemy.isAttacking
+    ){
+        enemy.isAttacking = false   
+        document.querySelector('#EnemyHealth').style.width = 20%   
+                            console.log('enemy danh player')
+    }
 }
 animate();
 
@@ -153,6 +193,10 @@ window.addEventListener('keydown', (event) => {
         case 'w':
             keys.w.pressed = true;
             player.lastkey = 'w'
+            break;
+        case ' ':
+            // player.isAttacking = true;
+            player.attack();
             break;        
 
         case 'ArrowLeft':
@@ -168,10 +212,11 @@ window.addEventListener('keydown', (event) => {
             enemy.lastkey = 'ArrowUp'
             break;
         case 'ArrowDown':
-            enemy.attack();
+            // enemy.isAttacking = true;
+            enemy.attack()
             break;
     }
-    console.log(event.key)
+                            console.log(event.key)
 } )
 
 //Thả nút
@@ -189,9 +234,7 @@ window.addEventListener('keyup', (event) => {
             keys.w.pressed = false;
             player.lastkey = 'w'
             break;
-        case ' ':
-            player.attack();
-            break;
+        
 
         case 'ArrowLeft':
             keys.ArrowLeft.pressed = false;
@@ -206,5 +249,5 @@ window.addEventListener('keyup', (event) => {
             enemy.lastkey = 'ArrowUp'
             break;        
     }
-    console.log(event.key)
+                            console.log(event.key)
 } )

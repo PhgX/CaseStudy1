@@ -5,9 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fighting game</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
-    <canvas></canvas>
+    <!-- Khung toàn map -->
+    <div style="position: relative; display: inline-block;">
+        <div style="position: absolute; display: flex; width: 100%; align-items: center; padding: 20px;">
+            <!-- Thanh máu player -->
+            <div id="PlayerHealth" style="background-color: red; height: 50px; width: 100%; display: flex;"></div>
+            <!-- Thời gian trận đấu -->
+            <div id="TimeMatch" style="background-color: rgba(194, 226, 10, 0.884); height: 100px; width: 100px; display: flex; flex-shrink: 0;"></div>
+            <!-- thanh máu enemy -->
+            <div id="EnemyHealth" style="background-color: red; height: 50px; width: 100%;"></div>
+        </div>
+        <canvas></canvas>
+    </div>
+    
 </body>
 <script src="luyentap.js"></script>
 </html>
