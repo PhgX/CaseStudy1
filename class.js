@@ -1,23 +1,26 @@
 class imageInput {
-    constructor({position, imgSrc}) {
+    constructor({position, imgSrc, scale = 2}) {
         this.position = position
         this.width = 50
         this.height = 150  
         this.image = new Image()
-        this.image.src = imgSrc        
+        this.image.src = imgSrc 
+        this.scale = scale
     } 
 
     draw() {
-        c.drawImage(this.image, this.position.x, this.position.y)
+        c.drawImage(this.image, this.position.x, this.position.y);
+        this.image.width * this.scale;
+        this.image.height * this.scale;
     } 
 
     update() {
-        this.draw()
+        this.draw();
     }
 }
 
 class Dojo {
-    constructor({position, speed, changeDirection}) {
+    constructor({position, speed, changeDirection = 1}) {
         this.position = position
         this.speed = speed
         this.width = 50
@@ -33,7 +36,10 @@ class Dojo {
             height: 50            
         }
         this.isAttack  
-        this.health = 100    
+        this.health = 100
+        this.hitAudio = new Audio('./audio/hitting.mp3') 
+        this.painAudio = new Audio('./audio/painsound.wav') 
+        this.gameStart = new Audio('./audio/Opening Game.mp3')       
     }
 
     draw() {
@@ -87,7 +93,7 @@ class Dojo {
     }
     
     attack() {
-        this.isAttack = true;
+        this.isAttack = true;        
         setTimeout (() => {
             this.isAttack = false;
         }, 100)

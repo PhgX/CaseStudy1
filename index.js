@@ -16,10 +16,10 @@ const background = new imageInput ({
 
 const house = new imageInput ({
     position: {
-        x: 0,
-        y: 0
+        x: 750,
+        y: 390
     },
-    imgSrc: './img/decorations/shop.png'
+    imgSrc: './img/background/shop.png'
 })
 
 const player = new Dojo ({
@@ -82,15 +82,16 @@ function timecountdown() {
     let timedecrease = setTimeout(timecountdown, 1000)      
     if(time>0){        
         time--
+        player.gameStart.play();
         document.querySelector('#time').innerHTML = time;                    
         if(player.health <= 0){            
             clearTimeout(timedecrease)
-            document.querySelector('#draw').innerHTML = 'Người chơi 2 win'
+            document.querySelector('#draw').innerHTML = 'Player 2 win'
             document.querySelector('#draw').style.display = 'flex'                         
         }
         if(enemy.health <= 0){            
             clearTimeout(timedecrease)
-            document.querySelector('#draw').innerHTML = 'Người chơi 1 win'
+            document.querySelector('#draw').innerHTML = 'Player 1 win'
             document.querySelector('#draw').style.display = 'flex'           
     }    
 }
@@ -113,6 +114,7 @@ function animate() {
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
     background.update()
+    house.update()
     player.update()
     enemy.update()    
     
@@ -149,6 +151,7 @@ function animate() {
     {
         player.isAttack = false
         enemy.health -= 20
+        enemy.painAudio.play()
         document.querySelector('#enemyhealth').style.width = enemy.health + '%'
         // console.log('player')
     }
@@ -161,6 +164,7 @@ function animate() {
         enemy.isAttack)
      {
          enemy.isAttack = false
+         player.painAudio.play()
          player.health -= 20
          document.querySelector("#playerhealth").style.width = player.health + '%'
         //  console.log('va cham1')
@@ -184,6 +188,7 @@ window.addEventListener('keydown', (event) => {
             break;
         case ' ':
             player.attack();
+            player.hitAudio.play()
             break;
 
         case 'ArrowRight': 
@@ -200,6 +205,7 @@ window.addEventListener('keydown', (event) => {
             break;
         case 'ArrowDown':
             enemy.attack();
+            enemy.hitAudio.play();
             break;        
     }
     // console.log(event.key)
