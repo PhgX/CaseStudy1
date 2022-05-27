@@ -62,6 +62,7 @@ class Dojo {
         this.painAudio = new Audio('./audio/painsound.wav') 
         this.gameStart = new Audio('./audio/Opening Game.mp3')  
         this.imageSrc = imageSrc
+        
     }
 
     draw() {
@@ -69,12 +70,12 @@ class Dojo {
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
         let img = new Image(this.width, this.height);
         img.src = this.imageSrc;
-        c.drawImage(img, this.position.x, this.position.y);
+        c.drawImage(img, this.position.x, this.position.y, this.width,this.height);
 
 
         if(this.isAttack) {
             c.fillStyle = 'blue'
-            c.fillRect(this.weaponRect.position.x, this.weaponRect.position.y, this.weaponRect.width, this.weaponRect.height)
+            c.fillRect(this.weaponRect.position.x, this.weaponRect.position.y, this.weaponRect.width*2/3, this.weaponRect.height*2/3)
         }         
     }
 
@@ -110,7 +111,7 @@ class Dojo {
         this.position.y += this.speed.y;
         this.position.x += this.speed.x;
 
-        if(this.position.y + this.height + this.speed.y + gravity >= canvas.height - 96){
+        if(this.position.y + this.height + this.speed.y + gravity >= canvas.height - 80){
             this.speed.y = 0;
         }
         else {
