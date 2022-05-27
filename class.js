@@ -61,18 +61,21 @@ class Dojo {
         this.hitAudio = new Audio('./audio/hitting.mp3') 
         this.painAudio = new Audio('./audio/painsound.wav') 
         this.gameStart = new Audio('./audio/Opening Game.mp3')  
-        this.image = imageSrc
+        this.imageSrc = imageSrc
     }
 
     draw() {
-        c.fillStyle = 'red'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.fillStyle = 'red'
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        let img = new Image(this.width, this.height);
+        img.src = this.imageSrc;
+        c.drawImage(img, this.position.x, this.position.y);
+
 
         if(this.isAttack) {
             c.fillStyle = 'blue'
             c.fillRect(this.weaponRect.position.x, this.weaponRect.position.y, this.weaponRect.width, this.weaponRect.height)
-        }
-                
+        }         
     }
 
     moveLeftSide() {
@@ -100,7 +103,7 @@ class Dojo {
     }
 
     update() {
-        // this.draw()
+        this.draw()
         this.weaponRect.position.x = this.position.x + this.weaponRect.changeDirection.x;
         this.weaponRect.position.y = this.position.y;
         
@@ -113,11 +116,8 @@ class Dojo {
         else {
             this.speed.y += gravity;
         }
-        let img = new Image(this.width, this.height);
-        img.onload = () => {
-        img.src = this.image;
-        c.drawImage(img, this.x, this.y);
-        }       
+
+        
     }
     
     attack() {

@@ -89,7 +89,7 @@ function timecountdown() {
     let timedecrease = setTimeout(timecountdown, 1000)      
     if(time>0){        
         time--
-        // player.gameStart.play()
+        player.gameStart.play()
         document.querySelector('#time').innerHTML = time;                    
         if(player.health <= 0){            
             clearTimeout(timedecrease)
@@ -122,7 +122,8 @@ function animate() {
     c.fillRect(0, 0, canvas.width, canvas.height)
     background.update()
     house.update()
-    player.update()    
+    player.update()
+    
     enemy.update()    
     
     //Player speed control & attack direction
