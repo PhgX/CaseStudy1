@@ -41,7 +41,7 @@ class imageInput {
 }
 
 class Dojo {
-    constructor({position, speed, changeDirection = 1}) {
+    constructor({position, speed, changeDirection = 1, imageSrc}) {
         this.position = position
         this.speed = speed
         this.width = 50
@@ -60,7 +60,8 @@ class Dojo {
         this.health = 100
         this.hitAudio = new Audio('./audio/hitting.mp3') 
         this.painAudio = new Audio('./audio/painsound.wav') 
-        this.gameStart = new Audio('./audio/Opening Game.mp3')       
+        this.gameStart = new Audio('./audio/Opening Game.mp3')  
+        this.image = imageSrc
     }
 
     draw() {
@@ -70,7 +71,8 @@ class Dojo {
         if(this.isAttack) {
             c.fillStyle = 'blue'
             c.fillRect(this.weaponRect.position.x, this.weaponRect.position.y, this.weaponRect.width, this.weaponRect.height)
-        }        
+        }
+                
     }
 
     moveLeftSide() {
@@ -98,7 +100,7 @@ class Dojo {
     }
 
     update() {
-        this.draw()
+        // this.draw()
         this.weaponRect.position.x = this.position.x + this.weaponRect.changeDirection.x;
         this.weaponRect.position.y = this.position.y;
         
@@ -110,7 +112,12 @@ class Dojo {
         }
         else {
             this.speed.y += gravity;
-        } 
+        }
+        let img = new Image(this.width, this.height);
+        img.onload = () => {
+        img.src = this.image;
+        c.drawImage(img, this.x, this.y);
+        }       
     }
     
     attack() {
